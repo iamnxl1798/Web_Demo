@@ -1,0 +1,283 @@
+﻿@using DuAn.Models.CustomModel
+@using DuAn.Models
+@model AdminModel
+@{
+    ViewBag.Title = "Index";
+}
+<style>
+    .datepicker td, .datepicker th {
+        width: 2.5rem;
+        height: 2.5rem;
+        font-size: 0.85rem;
+    }
+</style>
+
+
+<div class="row ml-1 col-12">
+    <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
+        <!--begin::Mixed Widget 18-->
+        <div class="card card-custom gutter-b" style="height:95%">
+            <div class="card-header">
+                <div class="card-title">
+                    <h3 class="card-label">Cập nhật dữ liệu bị thiếu</h3>
+                </div>
+            </div>
+            <!--begin::Form-->
+            <form>
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-12">
+                            <div class="dropzone" style="border:1px dashed green;border-radius: 25px;min-height:228px" id="kt_dropzone_3">
+                                <div class="dropzone-msg dz-message needsclick mt-20">
+                                    <h3 class="dropzone-msg-title">Drop files here or click to upload.</h3>
+                                    <span class="dropzone-msg-desc">Only .xls, .xlxs files are allowed for upload</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <label class="text-success mt-4" id="capNhatDuLieuLabel"></label>
+                </div>
+            </form>
+            <!--end::Form-->
+        </div>
+        <!--end::Mixed Widget 18-->
+    </div>
+
+    <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
+        <!--begin::Mixed Widget 18-->
+        <div class="card card-custom gutter-b" style="height:95%">
+            <div class="card-header">
+                <div class="card-title">
+                    <h3 class="card-label">Cập nhật công thức tính sản lượng</h3>
+                </div>
+            </div>
+            <!--begin::Form-->
+            <form>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <label for="inputTenCongThuc" class="col-form-label ml-4 mr-10">Tên công thức</label>
+                                <div class="">
+                                    <input type="text" class="form-control" id="inputTenCongThuc" placeholder="Tên công thức">
+                                </div>
+                            </div>
+                            <div>
+                                <label for="thoiGianHieuLuc" class="col-form-label mr-10">Thời gian hiệu lực</label>
+                                <div class="">
+                                    <div class="form-group mb-4">
+                                        <div class="datepicker date input-group p-0 shadow-sm">
+                                            <input type="text" placeholder="Thời gian hiệu lực" class="form-control py-4 px-4" id="thoiGianHieuLuc" readonly>
+                                            <div class="input-group-append"><span class="input-group-text px-4"><i class="fa fa-calendar"></i></span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-12 d-flex justify-content-between">
+                            <div class="row">
+                                <div class="d-inline m-3">
+                                    <select class="form-control bg-primary text-white" id="diemDo">
+                                        <option value="" hidden selected>Điểm đo</option>
+                                        @foreach (DiemDo item in Model.listDiemDo)
+                                        {
+                                            <option value="@item.ID" class="bg-white text-dark">@item.TenDiemDo</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="d-inline m-3">
+                                    <select class="form-control bg-primary text-white" id="kenh">
+                                        <option value="" hidden selected>Kênh</option>
+                                        @foreach (Kenh item in Model.listKenh)
+                                        {
+                                            <option value="@item.ID" class="bg-white text-dark">@item.Ten</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="d-inline m-3">
+                                    <p class="btn btn-success form-control" value="+" onclick="operatorBtnClick('+')"><span class="ml-3 mr-3">+</span></p>
+                                </div>
+                                <div class="d-inline m-3">
+                                    <p class="btn btn-success form-control" value="-" onclick="operatorBtnClick('-')"><span class="ml-3 mr-3">-</span></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="d-inline m-3"><p class="btn btn-danger form-control" value="del" onclick="delBtnClick()"><span class="ml-4 mr-4">Xóa</span></p></div>
+                                <div class="d-inline m-3"><p class="btn btn-danger form-control" value="add" onclick="addBtnClick()"><span class="ml-4 mr-4">Thêm</span></p></div>
+                            </div>
+                        </div>
+                        <div class="col-12 mt-7">
+                            <textarea id="phepTinh" class="form-control" style="font-size:22px" readonly></textarea>
+                            <p class="btn btn-success btn-block mt-4" onclick="submitCongThuc()">Cập nhật</p>
+                        </div>
+                        <label class="text-success mt-4" id="capNhatCongThucLabel"></label>
+                    </div>
+                </div>
+            </form>
+            <!--end::Form-->
+        </div>
+        <!--end::Mixed Widget 18-->
+    </div>
+    <div class="col-12">
+        <!--begin::Mixed Widget 18-->
+        <div class="card card-custom gutter-b" style="height:100%">
+            <div class="card-header">
+                <div class="card-title">
+                    <h3 class="card-label">Cập nhật công thức tính sản lượng</h3>
+                </div>
+            </div>
+            <!--begin::Form-->
+            <form>
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-12">
+                            <div class="dropzone" style="border:1px dashed green;border-radius: 25px;" id="kt_dropzone_3">
+                                <div class="dropzone-msg dz-message needsclick">
+                                    <h3 class="dropzone-msg-title">Drop files here or click to upload.</h3>
+                                    <span class="dropzone-msg-desc">Only .xls, .xlxs files are allowed for upload</span>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="text" class="form-control " />
+                    </div>
+                </div>
+            </form>
+            <!--end::Form-->
+        </div>
+        <!--end::Mixed Widget 18-->
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('.datepicker').datepicker({
+            clearBtn: true,
+            format: "dd/mm/yyyy"
+        });
+
+
+        // FOR DEMO PURPOSE
+        $('#reservationDate').on('change', function () {
+            var pickedDate = $('input').val();
+            $('#pickedDate').html(pickedDate);
+        });
+            $('#kt_dropzone_3').dropzone({
+                addRemoveLinks: true,
+                url: "@Url.Action("SaveDropzoneJsUploadedFiles","Admin")", // Set the url for your upload script location
+                paramName: "file", // The name that will be used to transfer the file
+                maxFiles: 10,
+                maxFilesize: 10, // MB
+                addRemoveLinks: true,
+                acceptedFiles: "text/csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                accept: function (file, done) {
+                    if (file.name == "justinbieber.jpg") {
+                        done("Naha, you don't.");
+                    } else {
+                        done();
+                    }
+                },
+                success: function (file, response) {
+                    if (document.getElementById("capNhatDuLieuLabel").classList.contains('text-danger')) {
+                        document.getElementById("capNhatDuLieuLabel").classList.add('text-success');
+                        document.getElementById("capNhatDuLieuLabel").classList.remove('text-danger');
+                    }
+                    document.getElementById("capNhatDuLieuLabel").innerHTML  = "Cập nhật thành công";
+                },
+                removedfile: function (file) {
+                    file.previewElement.remove();
+                    $.ajax({
+                        method:'POST',
+                        cache: false,
+                        url: "@Url.Action("RemoveFile","Admin")",
+                        data: { name: file.name },
+                        dataType:'json',
+                        success: function (message) {
+                            if (document.getElementById("capNhatDuLieuLabel").classList.contains('text-danger')) {
+                                document.getElementById("capNhatDuLieuLabel").classList.add('text-success');
+                                document.getElementById("capNhatDuLieuLabel").classList.remove('text-danger');
+                            }
+                            document.getElementById("capNhatDuLieuLabel").innerHTML = message.Message;
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            if (document.getElementById("capNhatDuLieuLabel").classList.contains('text-success')) {
+                                document.getElementById("capNhatDuLieuLabel").classList.add('text-danger');
+                                document.getElementById("capNhatDuLieuLabel").classList.remove('text-success');
+                            }
+                            document.getElementById("capNhatDuLieuLabel").innerHTML = "Xóa thất bại";
+                            console.log(thrownError);
+                        }
+                    });
+                }
+            });
+        });
+
+    function addBtnClick() {
+        var text = document.getElementById('phepTinh').value;
+        if (text.length != 0) {
+            if (text[text.length - 2] == '+' || text[text.length - 2] == '-') {
+                var diemDo = document.getElementById("diemDo");
+                var kenh = document.getElementById("kenh");
+                var diemDoText = diemDo.options[diemDo.selectedIndex].text;
+                var kenhText = kenh.options[kenh.selectedIndex].text;
+                var result = diemDoText + '_' + kenhText + ' ';
+                document.getElementById('phepTinh').value = text + result;
+            }
+        }
+        else {
+            var diemDo = document.getElementById("diemDo");
+            var kenh = document.getElementById("kenh");
+            var diemDoText = diemDo.options[diemDo.selectedIndex].text;
+            var kenhText = kenh.options[kenh.selectedIndex].text;
+            var result = diemDoText + '_' + kenhText + ' ';
+            document.getElementById('phepTinh').value = text + result;
+        }
+    }
+
+    function delBtnClick() {
+        var text = document.getElementById('phepTinh').value;
+        text = text.substring(0, text.length - 1);
+        document.getElementById('phepTinh').value = text.substring(0, text.lastIndexOf(' '));
+    }
+
+    function operatorBtnClick(operator) {
+        var text = document.getElementById('phepTinh').value;
+        if (text.length > 0 && text[text.length - 2] != '+' && text[text.length - 2] != '-') {
+            if (operator == '+') {
+                text += '+ ';
+            }
+            else {
+                text += '- ';
+            }
+            document.getElementById('phepTinh').value = text;
+        }
+    }
+
+    function submitCongThuc() {
+        var text = document.getElementById('phepTinh').value;
+        var nameStr = document.getElementById('tenCongThuc').value;
+        if (text.length != 0 && (text.contains('+') || text.contains('-')) && text[text.length - 2] != '+' && text[text.length - 2] != '-' && name.length!=0) {
+            $.ajax({
+                method:'POST',
+                cache: false,
+                url: "@Url.Action("UpdateFormula","Admin")",
+                data: { formula: text, name:nameStr },
+                dataType:'json',
+                success: function (message) {
+                    if (document.getElementById("capNhatCongThucLabel").classList.contains('text-danger')) {
+                        document.getElementById("capNhatCongThucLabel").classList.add('text-success');
+                        document.getElementById("capNhatCongThucLabel").classList.remove('text-danger');
+                    }
+                    document.getElementById("capNhatCongThucLabel").innerHTML = message.Message;
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    if (document.getElementById("capNhatCongThucLabel").classList.contains('text-success')) {
+                        document.getElementById("capNhatCongThucLabel").classList.add('text-danger');
+                        document.getElementById("capNhatCongThucLabel").classList.remove('text-success');
+                    }
+                    document.getElementById("capNhatCongThucLabel").innerHTML = "Cập nhật thất bại";
+                }
+            });
+        }
+    }
+</script>
