@@ -1,0 +1,46 @@
+﻿using DuAn.Attribute;
+using DuAn.Models.CustomModel;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+
+namespace DuAn.Controllers
+{
+    public class HomeController : Controller
+    {
+        public ActionResult Index(string dateStr="")
+        {
+            DateTime date = DateTime.Now.AddDays(-1);
+            if (dateStr != "")
+            {
+                date = DateTime.Parse(dateStr);
+            }
+            var data = DBContext.getDuKien(date.Date);
+            return View(data);
+        }
+        public ActionResult getModelDetail(int id)
+        {
+            var result = DBContext.getChiTietDiemDo(id);
+            return PartialView(result);
+        }
+
+        public ActionResult exportExcel()
+        {
+            var result= DBContext.exportExcel();
+            return result;
+        }
+
+        public ActionResult homePagePartialView(string dateStr="")
+        {
+            DateTime date = DateTime.Now.AddDays(-1);
+            if (dateStr != "")
+            {
+                date = DateTime.Parse(dateStr);
+            }
+            var data = DBContext.getDuKien(date.Date);
+            return PartialView();
+        }
+    }
+}
